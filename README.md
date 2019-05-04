@@ -181,6 +181,7 @@
 
 https://github.com/robotbird/donetci
 
+为了防止部分同学无法访问Github，所以放oschina的gitee上了
 
 https://gitee.com/robotbirdold/donetci
 
