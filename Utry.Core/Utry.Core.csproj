@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{25E9FD66-2E68-430B-8ACE-C92D65B8F507}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Utry.Core</RootNamespace>
+    <AssemblyName>Utry.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.SourceSafe.Interop, Version=5.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.VisualStudio.SourceSafe.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn">
+      <HintPath>..\packages\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\CICheckItem.cs" />
+    <Compile Include="Domain\CICodeLog.cs" />
+    <Compile Include="Domain\CICodeMenu.cs" />
+    <Compile Include="Domain\CIConfig.cs" />
+    <Compile Include="Domain\CIDemand.cs" />
+    <Compile Include="Domain\CILog.cs" />
+    <Compile Include="Domain\CIProject.cs" />
+    <Compile Include="Domain\CIRelease.cs" />
+    <Compile Include="Domain\CIReport.cs" />
+    <Compile Include="Domain\CIReview.cs" />
+    <Compile Include="Domain\CIReviewProblem.cs" />
+    <Compile Include="Domain\CIUser.cs" />
+    <Compile Include="Domain\CIUserOrg.cs" />
+    <Compile Include="Domain\CIVersionPlan.cs" />
+    <Compile Include="Domain\Enum\Enums.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IRepository\ICheckItemRepository.cs" />
+    <Compile Include="Repositories\IRepository\IDemandRepository.cs" />
+    <Compile Include="Repositories\IRepository\ILogRepository.cs" />
+    <Compile Include="Repositories\IRepository\IProjectRepository.cs" />
+    <Compile Include="Repositories\IRepository\IReleaseRepository.cs" />
+    <Compile Include="Repositories\IRepository\IReportRepository.cs" />
+    <Compile Include="Repositories\IRepository\IRepository.cs" />
+    <Compile Include="Repositories\IRepository\IReviewProblemRepository.cs" />
+    <Compile Include="Repositories\IRepository\IReviewRepository.cs" />
+    <Compile Include="Repositories\IRepository\IUserOrgRepository.cs" />
+    <Compile Include="Repositories\IRepository\IUserRepository.cs" />
+    <Compile Include="Repositories\IRepository\IVersionPlanRepository.cs" />
+    <Compile Include="Repositories\Repository\CheckItemRepository.cs" />
+    <Compile Include="Repositories\Repository\DemandRepository.cs" />
+    <Compile Include="Repositories\Repository\LogRepository.cs" />
+    <Compile Include="Repositories\Repository\ProjectRepository.cs" />
+    <Compile Include="Repositories\Repository\ReleaseRepository.cs" />
+    <Compile Include="Repositories\Repository\ReportRepository.cs" />
+    <Compile Include="Repositories\Repository\ReviewProblemRepository.cs" />
+    <Compile Include="Repositories\Repository\ReviewRepository.cs" />
+    <Compile Include="Repositories\Repository\UserOrgRepository.cs" />
+    <Compile Include="Repositories\Repository\UserRepository.cs" />
+    <Compile Include="Repositories\Repository\VersionPlanRepository.cs" />
+    <Compile Include="Services\CheckItemService.cs" />
+    <Compile Include="Services\DemandService.cs" />
+    <Compile Include="Services\LogService.cs" />
+    <Compile Include="Services\ProjectService.cs" />
+    <Compile Include="Services\ReleaseService.cs" />
+    <Compile Include="Services\ReportService.cs" />
+    <Compile Include="Services\ReviewProblemService.cs" />
+    <Compile Include="Services\ReviewService.cs" />
+    <Compile Include="Services\SvnService.cs" />
+    <Compile Include="Services\UserOrgService.cs" />
+    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\VersionPlanService.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Utry.Framework\Utry.Framework.csproj">
+      <Project>{AD40F3D0-54D4-4A71-9626-D5CCCFD5399D}</Project>
+      <Name>Utry.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

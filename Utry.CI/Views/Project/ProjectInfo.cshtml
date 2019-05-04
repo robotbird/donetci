@@ -1,0 +1,256 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.ProjectModel
+﻿@{
+    ViewBag.Title = "CI | 项目详情";
+}
+
+<div style="margin-top:39px;">
+ <div class="tab-pane" >
+@Html.JPartial("_Notifications")
+          <!--有用代码-->
+    <div class="portlet tabbable" style=" border: 0px ;">   
+                  <div class="portlet-body" style="padding:0px;">
+                  <input type="hidden" id="hidID" value="@Model.code" />
+                     <ul  class="nav nav-tabs">
+                        <li >
+                            <i class="icon-reorder"></i><span style="font-size:16px; font-weight:bold; padding-right:20px;">@Model.Project.ProjectName</span>
+
+                            <select id="ddlpro" class="select2_category form-control" style="width:200px;">
+                                @foreach (var item in Model.ProjectList)
+                                {
+                                    <option value="@item.ID">@item.ProjectName</option>
+                                }
+                             </select>                        </li>
+                        <li class="" style="float:right"><a href="@Url.Action("ProjectVersionDownLoad", "Project", new { id = Model.Project.ID })" >版本下载</a></li>
+                        <li class="" style="float:right"><a href="@Url.Action("ProjectReleaseInfo", "Project", new { id = Model.Project.ID })" >版本发布</a></li>
+                        <li class="" style="float:right"><a href="@Url.Action("ProjectReviewInfo", "Project", new { id = Model.Project.ID })" >需求评审</a></li>
+                        <li class="active" style="float:right"><a  href="@Url.Action("ProjectInfo", "Project", new { id = Model.Project.ID })" data-toggle="tab">基本信息</a></li>
+                     </ul>
+                     <div  class="tab-content">
+                     
+                        <div id="div1" class="tab-pane fade active in">
+                            <div class="portlet-body form">
+                                <div class="form-horizontal">
+                                <div class="form-body">
+                                     <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">项目名称:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectName</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">项目编号:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectCode</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">正式地址:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectFormalURL</p>
+                                             </div>
+                                          </div>
+                                       </div> 
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">测试地址:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectTestURL</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                     </div>
+                                    
+                                     <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">项目经理:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectManager</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">开发主管:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.Executive</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+
+                                     <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">项目成员:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectMember</p>
+                                             </div>
+                                          </div>
+                                       </div> 
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">SVN正式地址:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectSvnURLRelease</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                     </div>
+                                     <div class="row">
+                                     @if (ViewBag.Role == "开发人员" || ViewBag.Role == "管理员")
+                                     { 
+                                        <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">开发库地址:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.DBDevelopURL</p>
+                                             </div>
+                                          </div>
+                                       </div> 
+                                     }
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">SVN测试地址:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.ProjectSvnURL</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                     </div>
+
+                                     @if (ViewBag.Role == "版本发布人员" || ViewBag.Role == "管理员")
+                                     { 
+                                        <div class="row">
+                                           <div class="col-md-6">
+                                              <div class="form-group">
+                                                 <label class="control-label col-md-3" style="width:120px;">测试库地址:</label>
+                                                 <div class="col-md-9">
+                                                    <p class="form-control-static">@Model.Project.DBTestURL</p>
+                                                 </div>
+                                              </div>
+                                           </div> 
+
+                                           <div class="col-md-6">
+                                              <div class="form-group">
+                                                 <label class="control-label col-md-3" style="width:120px;">正式库地址:</label>
+                                                 <div class="col-md-9">
+                                                    <p class="form-control-static">@Model.Project.DBFormalURL</p>
+                                                 </div>
+                                              </div>
+                                           </div>
+                                         </div>
+                                     }
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" style="width:120px;">添加时间:</label>
+                                                <div class="col-md-9">
+                                                    <p class="form-control-static">@Model.Project.AddTime</p>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" style="width:120px;">修改时间:</label>
+                                                <div class="col-md-9">
+                                                    <p class="form-control-static">@Model.Project.UpdateTime</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                     <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">解决方案名称:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.SlnName</p>
+                                             </div>
+                                          </div>
+                                       </div> 
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">打包地址:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.PackagePath</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                     </div>
+
+                                     
+
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;">备注:</label>
+                                             <div class="col-md-9">
+                                                <p class="form-control-static">@Model.Project.Remark</p>
+                                             </div>
+                                          </div>
+                                       </div> 
+                                       @if (ViewBag.Role == "管理员")
+                                       { 
+                                        <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label class="control-label col-md-3" style="width:120px;"></label>
+                                             <div class="col-md-9">
+                                                <a class="btn btn-sm btn-success"  href="@Url.Action("ProjectAdd", "Project", new { id = Model.Project.ID, info = 1 })">修改</a>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       }
+                                       
+                                     </div>
+                                </div>
+                            </div>
+                           </div>
+                           
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+        FormSamples.init();
+    });
+    $(document).ready(function () {
+        $("#ddlpro").change(function () {
+            var url = $("#ddlpro").val();
+            var index = $("#ddlpro").get(0).selectedIndex;
+            //alert(index);
+            window.location.href = "/Project/ProjectInfo?id=" + url;
+        });
+    });
+</script>
+
+ </div>
+
+</div>
+
+

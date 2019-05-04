@@ -1,0 +1,77 @@
+﻿@using Utry.Framework.Mvc
+@using System.Data;
+@model Utry.CI.Models.ReportModel
+﻿@{
+    ViewBag.Title = "CI | 报表详情";
+}
+
+<div style="margin-top:42px;">
+<form name="form1" method="post" action="@Url.Action("ReportInfo", "Report")" >
+@Html.JPartial("_Notifications")
+     <div class="table-toolbar">
+            
+          <div class="btn-group">
+                <a id="sample_editable_1_new" class="btn btn-sm btn-success" onclick="ExpToExcel()" >
+                   导出Excel <i class="icon-plus"></i>
+                </a>
+          </div>
+
+          <div class="btn-group">
+                <input type="text" name="BeginDate" id="BeginDate" placeholder="开始时间"  value="@Model.BeginDate" class="form-control datefrom" style="width:130px;"/> 
+          </div>
+
+         <div class="btn-group">
+		       <input type="text" name="EndDate" id="EndDate" placeholder="结束时间" value="@Model.EndDate" class="form-control dateto" style="width:130px;"/>        
+          </div>
+
+          <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-success" onclick="query()"><i class="icon-search"></i></button>          </div>
+   
+                      
+     </div>
+    
+     <table class="table table-striped table-bordered table-hover" id="reportlist">
+                        <thead>
+                          <tr>
+                            @foreach (DataColumn col in Model.dtReport.Columns)
+                            {
+                               <th>@col.ColumnName </th>
+                            }
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                         @foreach (DataRow row in Model.dtReport.Rows)
+                         {
+                          <tr>
+                            @for (var i = 0; i < Model.dtReport.Columns.Count; i++)
+                            { 
+                                <td>@row[i] </td>
+                            }
+                          </tr>
+                         }
+
+                        </tbody>
+                      </table>
+
+ </form>
+</div>
+
+<script type="text/javascript">
+    //查询
+    function query() {
+        document.forms[0].action = '@Url.Action("Reportinfo", "Report")';
+        document.forms[0].method = 'post';
+        document.forms[0].submit();
+    }
+
+    $(".datefrom").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+    $(".dateto").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+
+    function ExpToExcel() {
+        document.forms[0].action = '@Url.Action("ExportToExcel", "Report", new { id = Model.Report.ID})';
+        document.forms[0].method = 'post';
+        document.forms[0].submit();
+    }
+</script>
+

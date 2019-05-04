@@ -1,0 +1,185 @@
+﻿@using Utry.Framework.Mvc
+@using Utry.Framework.Configuration;
+@model Utry.CI.Models.ProjectModel
+﻿@{
+    ViewBag.Title = "CI | 项目详情";
+}
+
+<div style="margin-top:39px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <!--有用代码-->
+    <div class="portlet" style=" border: 0px ;">   
+                  <div class="portlet-body" style="padding:0px;">
+                     <ul  class="nav nav-tabs">
+                        <li >
+                            <i class="icon-reorder"></i><span style="font-size:16px; font-weight:bold; padding-right:20px;">@Model.Project.ProjectName</span> 
+                            <select id="ddlpro" class="select2_category form-control" style="width:200px;">
+                                @foreach (var item in Model.ProjectList)
+                                {
+                                    <option value="@item.ID">@item.ProjectName</option>
+                                }
+                             </select>
+                        
+                        </li>
+                        <li class="" style="float:right"><a href="@Url.Action("ProjectVersionDownLoad", "Project", new { id = Model.Project.ID })" >版本下载</a></li>
+                        <li class="active " style="float:right"><a href="@Url.Action("ProjectReleaseInfo", "Project", new { id = Model.Project.ID })" data-toggle="tab">版本发布</a></li>
+                        <li class="" style="float:right"><a  href="@Url.Action("ProjectReviewInfo", "Project", new { id = Model.Project.ID })" >需求评审</a></li>
+                        <li class="" style="float:right"><a  href="@Url.Action("ProjectInfo", "Project", new { id= Model.Project.ID })" >基本信息</a></li>
+                     </ul>
+                     <div  class="tab-content">
+
+                    <form name="form1" method="post" action="@Url.Action("projectreleaseinfo", "Project", new { id = Model.Project.ID })" enctype="multipart/form-data">
+                            <div class="table-toolbar">
+                                @if (ViewBag.Role == "管理员")
+                                { 
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        版本发布 <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu">
+                                        <li><a href="@Url.Action("ReleaseAdd", "project", new { id = Model.Project.ID })">发布测试版</a></li>
+                                        <li><a href="@Url.Action("ReleaseFormalAdd", "project", new { id = Model.Project.ID })">发布正式版</a></li>
+                                      </ul>
+                                    </div>
+                                }
+                                  
+                     
+                                  <div class="btn-group">
+                                       <button type="button" class="btn btn-sm btn-default">筛选</button>
+                                       <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-angle-down"></i></button>
+                                       <div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
+                                           <label><input type="checkbox" name="VersionType" value="1" />正式版本</label>
+                                           <label><input type="checkbox" name="VersionType" value="0" />测试版本</label>
+                                           <label><input type="checkbox" name="Status" value="1" />发布成功</label>
+                                           <label><input type="checkbox" name="Status" value="0" />发布失败</label>
+                                           <label><input type="checkbox" name="TestStatus" value="1" />测试通过</label>
+                                           <label><input type="checkbox" name="TestStatus" value="0" />测试不通过</label>
+                                       </div>
+                                  </div>
+
+                                  <div class="btn-group">
+           	                            <input type="text" name="BeginDate" id="BeginDate" placeholder="开始时间" value="@Model.BeginDate" class="form-control datefrom" style="width:130px;"/>
+                                  </div>
+
+                                  <div class="btn-group">
+           	                            <input type="text" name="EndDate" id="EndDate" placeholder="结束时间" value="@Model.EndDate" class="form-control dateto" style="width:130px;"/>
+                                  </div>
+
+                                  <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-success" onclick="query()"><i class="icon-search"></i></button>                                  </div>
+   
+                      
+                            </div>
+                        
+                            <table class="table table-striped table-bordered table-hover" id="projectlist">
+                              <thead>
+                                <tr>
+                                  <th>发布时间</th>
+                                  <th>耗时</th>
+                                  <th>操作人员</th>
+                                  <th>日志</th>
+                                  <th>版本类型</th>
+                                  <th>发布状态</th>
+                                  <th>测试状态</th>
+                                  <th>备注</th>
+                                  <th>操作</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+
+                               @foreach (var item in Model.ReleaseList)
+                               {
+                                <tr id="@item.ID">
+                                 <td>@item.AddTime</td>
+                                 <td>@item.spendtime </td>
+                                 <td>@item.Operator</td>
+                                 <td><a href="@Url.Action("ShowLog", "project", new { id = item.ID })" target="_blank">查看日志</a></td>
+                                 <td>@item.Type</td>
+                                 @if (item.Status == "发布成功")
+                                 {
+                                    <td>@Html.Raw(Utry.Framework.Utils.TypeConverter.ObjectToString(item.Status).Replace("发布中", "<span class=\"label label-sm label-warning\">发布中</span> &nbsp;").Replace("发布成功", "<span class=\"label label-sm label-success\">发布成功</span> &nbsp;").Replace("发布失败", "<span class=\"label label-sm label-danger\">发布失败</span> &nbsp;"))  <a href="@ConfigHelper.GetValue("CI_Release_Uri")@item.VersionURL" >下载</a></td>
+                                 }
+                                 else
+                                 { 
+                                   <td>@Html.Raw(Utry.Framework.Utils.TypeConverter.ObjectToString(item.Status).Replace("发布中", "<span class=\"label label-sm label-warning\">发布中</span> &nbsp;").Replace("发布成功", "<span class=\"label label-sm label-success\">发布成功</span> &nbsp;").Replace("发布失败", "<span class=\"label label-sm label-danger\">发布失败</span> &nbsp;"))  </td>
+                                 }
+                                 <td>@Html.Raw(Utry.Framework.Utils.TypeConverter.ObjectToString(item.TestStatus).Replace("测试通过", "<span class=\"label label-sm label-success\">测试通过</span> &nbsp;").Replace("不通过", "<span class=\"label label-sm label-danger\">不通过</span> &nbsp;"))</td>
+                                 <td><a href="@Url.Action("ShowRemark", "project", new { id = item.ID })" target="_blank">查看备注</a></td>
+                                 <td>
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        操作 <span class="caret"></span>
+                                      </button>
+                                          @if (ViewBag.Role == "管理员")
+                                          { 
+                                            <ul class="dropdown-menu" role="menu">
+                                            <li><a href="@Url.Action("SetTestStatus", "project", new { proid = Model.Project.ID, id = item.ID, ifpass = 1 })">测试通过</a></li>
+                                            <li><a href="@Url.Action("SetTestStatus", "project", new { proid = Model.Project.ID, id = item.ID, ifpass = 2 })">不通过</a></li>
+                                            </ul>
+                                          }
+                                    </div>
+                                 </td>
+                                </tr>
+                               }
+
+                              </tbody>
+                            </table>
+                        <div id="pager"><ul class="pagination">@Html.Pager(Model.PageList).ShowIndividualPages(true)</ul> </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+ </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+        FormSamples.init();
+    });
+    $(document).ready(function () {
+        $("#ddlpro").change(function () {
+            var url = $("#ddlpro").val();
+            var index = $("#ddlpro").get(0).selectedIndex;
+            //alert(index);
+            window.location.href = "/Project/ProjectReleaseInfo?id=" + url;
+        });
+    });
+
+    //查询
+    function query() {
+        document.forms[0].action = '@Url.Action("projectreleaseinfo", "Project", new { id = Model.Project.ID })';
+        document.forms[0].method = 'post';
+        document.forms[0].submit();
+    }
+
+    $(".datefrom").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+    $(".dateto").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+
+    //异步获取状态
+    function getsyncStatus() {
+        var ids = $("#projectlist tbody tr");
+        $.each(ids, function (i, obj) {
+            if ($(obj).text().indexOf("发布中") > -1) {
+                var id = obj.id;
+                $.ajax({
+                    url: "/Project/GetSyncStatus/" + id,
+                    type: "GET",
+                    success: function (data) {
+                        if (data.Status != "发布中") {
+                            window.location.href = "/Project/ProjectReleaseInfo/@Model.Project.ID";
+                        }
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    setInterval(getsyncStatus, 2000);
+</script>

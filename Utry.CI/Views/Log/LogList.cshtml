@@ -1,0 +1,52 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.LogListModel
+@{
+    ViewBag.Title = "Log日志列表";
+}
+
+<div style="margin-top:60px;">
+<form name="form1" >
+
+ @Html.JPartial("_Notifications")
+
+  <table class="table table-striped table-bordered table-hover" id="checklist">
+        <thead>
+          <tr>
+            <th>Log日志名称</th>
+            <th>日志大小（KB）</th>
+            <th>创建日期</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          @foreach (var item in Model.Loglist)
+          {
+              <tr>
+              <td>
+               <a href="@item.Logname" target="_blank">@item.Logname</a> 
+              </td>
+              <td>
+                @item.Logsize
+              </td>
+              <td>
+                @item.Createtime
+              </td>
+              <td>
+               <a href="@Url.Action("DeleteLog", "Log", new { name = item.Logname })" onclick="return confirm('确定删除?');">删除</a>
+              </td>
+              </tr>
+          }
+           
+        </tbody>
+      </table>
+
+
+<div id="pager"><ul class="pagination"></ul> </div>
+
+</form>
+</div>
+
+
+
+

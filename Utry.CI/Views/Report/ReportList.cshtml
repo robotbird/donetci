@@ -1,0 +1,78 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.ReportModel
+@{
+    ViewBag.Title = "报表列表";
+}
+
+<div style="margin-top:60px;">
+<form name="form1" method="post" action="@Url.Action("Reportlist", "Report")" >
+@Html.JPartial("_Notifications")
+<div class="table-toolbar">
+
+    <div class="btn-group">
+          <a id="sample_editable_1_new" class="btn btn-sm btn-success"  href="@Url.Action("ReportAdd", "Report")" >
+             添加报表 <i class="icon-plus"></i>
+          </a>
+    </div>
+
+      <div class="btn-group">
+           	<input type="text" name="ReportName" id="ReportName" placeholder="报表名称" value="@Model.ReportName" class="form-control" style="width:180px;"/>
+      </div>
+
+      <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-success" onclick="query()"><i class="icon-search"></i></button>      </div>
+   
+                      
+</div>
+
+
+<table class="table table-striped table-bordered table-hover" id="reportlist">
+        <thead>
+          <tr>
+            <th >报表名称</th>
+            <th >报表SQL</th>
+            <th >操作</th>
+          </tr>
+        </thead>
+        <tbody>
+
+         @foreach (var item in Model.ReportList)
+         {
+          <tr>
+            <td style="width:10%"><a href="@Url.Action("ReportInfo", "Report", new { id = item.ID})">@item.ReportName</a> </td>
+            <td style="width:80%">@item.ReportSQL  </td>
+            <td >
+               <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    操作 <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="@Url.Action("ReportAdd", "Report", new { Id = item.ID })">修改</a></li>
+                    <li><a href="@Url.Action("DeleteReport", "Report", new { Id = item.ID })" onclick="return confirm('确定删除?');">删除</a></li>
+                    @*<li><a href="@Url.Action("ProjectEdit", "project", new { Id = item.ID, act = "view" })">查看</a></li>*@
+                  </ul>
+                </div>
+             </td>
+          </tr>
+         }
+
+        </tbody>
+      </table>
+
+
+<div id="pager"><ul class="pagination">@Html.Pager(Model.Pagelist).ShowIndividualPages(true)</ul> </div>
+</form>
+</div>
+
+<script type="text/javascript">
+    //查询
+    function query() {
+        document.forms[0].action = '@Url.Action("Reportlist", "Report")';
+        document.forms[0].method = 'post';
+        document.forms[0].submit();
+    }
+
+</script>
+
+
+

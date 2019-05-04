@@ -1,0 +1,120 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.UserOrgModel
+﻿@{
+    ViewBag.Title = "CI | 小组信息";
+}
+<style>
+.col-md-3{width:10%;}
+</style>
+
+
+
+<div style="margin-top:60px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">小组信息</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  id="Orgform" action="@Url.Action(Model.Action, "UserOrg")" method="post" class="form-horizontal form-bordered form-row-stripped" >
+
+                              <input type="hidden" id="hdAction" value="@Model.Action" />
+			                  <input type="hidden" id="hdOrgCode" name="hdOrgCode" value="@Model.UserOrg.OrgCode" />
+
+                                 <div class="form-body">
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">小组名称：</label>
+                                       <div class="col-md-9">
+                                          <input type="text" placeholder="请填写小组名称" class="form-control" name="orgname" id="orgname"  style="width:95%;" value="@Model.UserOrg.OrgName"/>
+                                       </div>
+                                    </div>
+                                   
+
+                                      <div class="form-group">
+                                          <label class="control-label col-md-3">小组编号：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写小组编号" class="form-control" name="orgcode" id="orgcode"  style="width:95%;" value="@Model.UserOrg.OrgCode"/>
+                                          </div>
+                                       </div>
+
+                                 </div>
+
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  <a class="btn btn-default btn-sm"  href="@Url.Action("UserOrglist", "UserOrg")">返回</a>
+                                                <button type="submit" id="register-submit-btn" class="btn btn-primary btn-sm">
+				                                提交 <i class="m-icon-swapright m-icon-white"></i>
+				                                </button>
+                                                                                                              
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+                        </div>
+ </div>
+
+ <script src="/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="../../Assets/plugins/jquery-validation/jquery.validate.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>  
+	<script src="/assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript" ></script>
+ 	<script>
+ 	    jQuery(document).ready(function () {
+ 	        Load();
+
+ 	        $("#Orgform").validate({
+ 	            rules: {
+ 	                orgname: { required: true },
+ 	                orgcode: {required:true}
+ 	            },
+                messages:{
+                    orgname: { required: "小组名称不能为空" },
+ 	                orgcode: { required:"小组编号不能为空"}
+                }
+ 	        });
+
+ 	        $("#orgcode").blur(function () {
+ 	            if ($("#orgcode").val() != "" && $("#hdAction").val() == "UserOrgAdd") {
+ 	                $.ajax({
+ 	                    type: "POST",
+ 	                    url: '@Url.Action("CheckOrgCode", "UserOrg")',
+ 	                    data: { username: $("#orgcode").val() },
+ 	                    success: function (msg) {
+ 	                        if (msg == "1") {
+ 	                            alert("小组编号存在，请重新输入！");
+ 	                            $("#orgcode").val("");
+ 	                        }
+ 	                    }
+ 	                });
+ 	            }
+ 	        });
+
+
+
+ 	        function Load() {
+ 	            if ($("#hdAction").val() == "UserOrgEdit") {
+ 	                $("#orgcode").attr("readonly", "readonly");
+ 	            }
+ 	        }
+
+ 	    });
+
+ 	    
+	</script>
+</div>
+

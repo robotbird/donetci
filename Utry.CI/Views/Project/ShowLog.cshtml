@@ -1,0 +1,18 @@
+﻿@model Utry.CI.Models.ProjectModel
+@{
+    ViewBag.Title = "发布日志";
+    Layout = null;
+}
+<html>
+<head>
+<title>CI | 发布日志</title>
+</head>
+<body style="font-size: 14px;font-family: 微软雅黑;">
+    @if (!string.IsNullOrEmpty(Model.Release.LogContent))
+    { 
+        @Html.Raw(Model.Release.LogContent.Replace("\r\n", "<br>"));
+    }
+</body>
+</html>
+
+

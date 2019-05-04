@@ -1,0 +1,54 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.UserModel
+@{
+    ViewBag.Title = "开发人员列表";
+}
+
+<div style="margin-top:60px;">
+<form name="form1" >
+
+ @Html.JPartial("_Notifications")
+<div class="table-toolbar">
+
+    <div class="btn-group">
+          <a id="sample_editable_1_new" class="btn btn-sm btn-success"  href="@Url.Action("UserEdit","Users")" >
+             添加用户 <i class="icon-plus"></i>
+          </a>
+    </div>
+                      
+</div>
+
+  <table class="table table-striped table-bordered table-hover" id="checklist">
+        <thead>
+          <tr>
+            <th>用户名</th>
+            <th>开发人员名称</th>
+            <th>开发人员角色</th>
+            <th>所属小组</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          @foreach (var item in Model.Users)
+          {
+              <tr>
+              <td>@item.UserName</td>
+              <td>@item.FullName</td>
+              <td>@item.Role</td> 
+              <td>@item.OrgName</td>
+              <td>
+              <a href="@Url.Action("UserEdit", "Users", new { username = item.UserName })">编辑</a>
+               <a href="@Url.Action("UsersDelete", "Users", new { username = item.UserName })" onclick="return confirm('确定删除?');">删除</a>
+              </td>
+              </tr>
+          }
+           
+        </tbody>
+      </table>
+
+
+<div id="pager"><ul class="pagination"></ul> </div>
+
+</form>
+</div>

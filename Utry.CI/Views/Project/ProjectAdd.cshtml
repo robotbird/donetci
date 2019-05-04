@@ -1,0 +1,203 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.ProjectModel
+﻿@{
+    ViewBag.Title = "CI | 项目信息";
+}
+<style>
+.col-md-3{width:10%;}
+</style>
+
+<div style="margin-top:60px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">项目信息</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  id="Proform" action="@Url.Action("ProjectAdd", "Project")" method="post" class="form-horizontal form-bordered form-row-stripped" >
+                              
+
+                                 <div class="form-body">
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">项目名称：</label>
+                                       <div class="col-md-9">
+                                          <input type="text" placeholder="请填写项目名称" class="form-control" name="projectName" id="projectName"  style="width:95%;" value="@Model.Project.ProjectName"/>
+                                       </div>
+                                    </div>
+                                   
+
+                                      <div class="form-group">  
+                                          <label class="control-label col-md-3">项目编号：</label>
+                                          <div class="col-md-9">
+                                          @if (string.IsNullOrEmpty(Model.Project.ID))
+                                           { 
+                                            <input type="text" placeholder="请填写项目编号" class="form-control" name="projectcode" id="projectcode"  style="width:95%;" value="@Model.Project.ProjectCode"/>
+                                           }
+                                           else
+                                           {
+                                            <input type="text" placeholder="请填写项目编号" class="form-control" name="projectcode" id="projectcode" readonly="readonly"  style="width:95%;" value="@Model.Project.ProjectCode"/>
+                                           }
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">项目经理：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写项目经理" class="form-control" name="ProjectManager" id="ProjectManager"  style="width:95%;" value="@Model.Project.ProjectManager"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">开发主管：</label>
+                                          <div class="col-md-9">
+                                               @*<input type="hidden" id="hidUsername" name="hidUsername" value="@Model.Project.Executive"/>*@
+                                               <input type="text" placeholder="请选择开发主管" class="form-control" name="Executive" id="Executive"  style="width:95%;" value="@Model.Project.Executive"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">项目成员：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写项目成员" class="form-control" name="projectmember" id="projectmember"  style="width:95%;" value="@Model.Project.ProjectMember"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">正式地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写正式地址" class="form-control" name="ProjectFormalURL" id="ProjectFormalURL"  style="width:95%;" value="@Model.Project.ProjectFormalURL"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">测试地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写测试地址" class="form-control" name="projecttesturl" id="projecttesturl"  style="width:95%;" value="@Model.Project.ProjectTestURL"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">开发库地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写开发库地址" class="form-control" name="DBTestURL" id="DBTestURL"  style="width:95%;" value="@Model.Project.DBTestURL"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">测试库地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写测试库地址" class="form-control" name="DBDevelopURL" id="DBDevelopURL"  style="width:95%;" value="@Model.Project.DBDevelopURL"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">正式库地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写正式库地址" class="form-control" name="DBFormalURL" id="DBFormalURL"  style="width:95%;" value="@Model.Project.DBFormalURL"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">SVN测试地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写SVN测试地址" class="form-control" name="projectsvnurl" id="projectsvnurl"  style="width:95%;" value="@Model.Project.ProjectSvnURL"/>
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">SVN正式地址：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写SVN正式地址" class="form-control" name="ProjectSvnURLRelease" id="ProjectSvnURLRelease"  style="width:95%;" value="@Model.Project.ProjectSvnURLRelease"/>
+                                          </div>
+                                       </div>
+                                     <div class="form-group">
+                                         <label class="control-label col-md-3">解决方案(sln)名称：</label>
+                                         <div class="col-md-9">
+                                             <input type="text" placeholder="请填写解决方案名称，例如aa.sln，如果当前分支根目录有解决方案请加上文件夹名称，例如db_transfer_new/aaa.sln" class="form-control" name="SlnName" id="SlnName"  style="width:95%;" value="@Model.Project.SlnName"/>
+                                         </div>
+                                     </div>
+                                     
+                                      <div class="form-group">
+                                          <label class="control-label col-md-3">打包路径：</label>
+                                          <div class="col-md-9">
+                                               <input type="text" placeholder="请填写当前方案下需要打包的路径，例如ccms_v8/web" class="form-control" name="PackagePath" id="PackagePath"  style="width:95%;" value="@Model.Project.PackagePath"/>
+                                          </div>
+                                       </div>
+
+
+                                     <div class="form-group">
+                                          <label class="control-label col-md-3">备注：</label>
+                                          <div class="col-md-9">
+                                               <textarea class="form-control" placeholder="请填写备注"  rows="2" cols="20" id="remark" name="remark" style="height:100px;width:95%;">@Model.Project.Remark</textarea>
+                                          </div>
+                                       </div>
+
+                                 </div>
+
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  <a class="btn btn-default btn-sm"  href="@Url.Action("Projectlist", "Project")">返回</a>
+                                                  @if (Request.QueryString["act"] != "view")
+                                                  { 
+                                                     <button type="submit" id="register-submit-btn" class="btn btn-primary btn-sm">
+				                                        提交 <i class="m-icon-swapright m-icon-white"></i>
+				                                     </button>
+                                                  }
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+                        </div>
+ </div>
+ <script src="/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/Assets/plugins/jquery-validation/jquery.validate.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>  
+	<script src="/assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript" ></script>
+ 	<script type="text/javascript">
+ 	    $(document).ready(function () {
+ 	        $("#Proform").validate({
+ 	            rules: {
+ 	                projectName: { required: true },
+ 	                projectcode: { required: true }
+ 	            },
+ 	            messages: {
+ 	                projectName: { required: "项目名称不能为空" },
+ 	                projectcode: { required: "项目编号不能为空" }
+ 	            }
+ 	        });
+
+
+ 	        $("#projectcode").change(function () {
+ 	            $.ajax({
+ 	                type: "POST",
+ 	                url: '@Url.Action("IfExist", "Project")',
+ 	                data: { projectcode: $("#projectcode").val() },
+ 	                success: function (msg) {
+ 	                    if (msg == "1") {
+ 	                        alert("项目编号已存在，请重新输入！");
+ 	                        $("#projectcode").val("");
+ 	                    }
+ 	                }
+                })
+ 	        });
+
+ 	    });
+	</script>
+</div>
+

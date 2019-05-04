@@ -1,0 +1,549 @@
+﻿@using Utry.Framework.Mvc
+@using System.Collections;
+@model Utry.CI.Models.ReviewModel
+﻿@{
+    ViewBag.Title = "CI | 评审信息";
+}
+@*<style>
+.col-md-3{width:10%;}
+</style>*@
+
+<div style="margin-top:60px;">
+   <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">评审信息</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  id="Revform" action="@Url.Action(Model.Action, "Review")" method="post" class="form-horizontal "  enctype="multipart/form-data">
+                              
+                              <input type="hidden" id="hidID" name="hidID" value="@Model.ID"/>
+                              <input type="hidden" id="hidIfAdd" name="hidIfAdd" value="@Model.IfAdd"/>
+                              <input type="hidden" id="hidIfPro" name="hidIfPro" value="@Model.IfPro"/>
+                              <input type="hidden" id="hidProID" name="hidProID" value="@Model.Review.ProjectID"/>
+                              @if (Request.QueryString["act"] == "view")
+                              { 
+                                <input type="hidden" id="hidIfDel" name="hidIfDel" value="1"/>
+                              }
+                                 <div class="form-body">
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">评审项目：</label>
+                                            <div class="col-md-9">
+                                               @Html.DropDownListFor(model => model.ProjectCode, Model.ProjectSelectItem, new { @class = "select2_category form-control", @style = "width:200px;" })
+                                            </div>
+                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label class="control-label col-md-3">评审目的：</label>
+                                        <div class="col-md-9">
+                                          <input type="text"  class="form-control" name="Purpose" id="Purpose" value="@Model.Review.Purpose"/>
+                                       </div>
+                                    </div>
+                                    </div>
+                                   </div>
+
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                           <label class="control-label col-md-3">评审页数：</label>
+                                           <div class="col-md-9">
+                                              <input type="text" placeholder="请填写评审页数" class="form-control" name="Scale" id="Scale" style="width:200px;" value="@Model.Review.Scale"/>
+                                           </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                           <label class="control-label col-md-3">评审方式：</label>
+                                           <div class="col-md-9">
+                                              @Html.DropDownListFor(model => model.Method, Model.MethodSelectItem, new { @class = "form-control", @style = "width:200px;" })
+                                           </div>
+                                       </div>
+                                       </div>
+                                 </div>
+
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                          <label class="control-label col-md-3">是否复审：</label>
+                                          <input type="hidden" id="hidIf" />
+                                           <div class="col-md-9">
+                                                    @*<input type="checkbox" name="check" id="chkyes" value="是" />是
+                                                    <input type="checkbox" name="check" id="chkno" value="否" />否
+                                                   @if (Model.Review.IfReview == "是")
+                                                   { 
+                                                        <input type="checkbox" name="chkyes" id="chkyes" value="是" onclick="IfReChange()" checked="checked"/> 
+                                                       @:是
+                                                        <input type="checkbox" name="chkno" id="chkno" value="否" onclick="IfReChange()"/>
+                                                       @:否
+                                                   }*@
+                                                   @Html.DropDownListFor(model => model.IfReview, Model.IfReviewSelectItem, new { @class = "form-control", @style = "width:200px;" })
+                                           </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">评审人员：</label>
+                                            <div class="col-md-9">
+                                                   <input type="hidden" id="hidUsername" name="hidUsername" value="@Model.Review.Member"/>
+                                                   <a data-toggle="modal" href="#Responsive">
+                                                   <input type="text" placeholder="请选择评审人员" class="form-control" name="Member" id="Member"  style="cursor:pointer;" value="@Model.User.FullName"/>
+                                                   </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>  
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">准备工作量：</label>
+                                               <div class="col-md-9">
+                                                  <input type="text" placeholder="请填写准备工作量" class="form-control" name="PrepareTime" id="PrepareTime" style="width:200px;" value="@Model.Review.PrepareTime"/>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <div class="form-group">
+                                                <label class="control-label col-md-3">评审结果：</label>
+                                               <div class="col-md-9">
+                                                  @Html.DropDownListFor(model => model.Status, Model.StatusSelectItem, new { @class = "form-control", @style = "width:200px;" })
+                                               </div>
+                                           </div>
+                                        </div>
+                                   </div>
+
+                                   <div class="row">
+                                    <div class="col-md-6" >
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">评审资料：</label>
+                                          <div class="col-md-9">
+                                          <input type="hidden"  id="Attachment" name="Attachment" value="@Model.Review.Attachment"  />
+                                          
+                                                @if (Request.QueryString["act"] != "view")
+                                                {
+                                                    <div id="fileQueue"></div>
+                                                    <input type="file" name="uploadify" id="uploadify" />
+                                                }
+                                                @if (!string.IsNullOrEmpty(Model.Review.Attachment))
+                                                {
+                                                        <div id="AttachmentTxt">
+                                                            @{
+                                                                var listname =new List<string>();
+                                                                    var file = Model.Review.Attachment;
+                                                                    var files = Model.Review.Attachment.Substring(0, file.Length - 1).Split(',');
+                                                                    foreach (var item in files)
+                                                                    {
+                                                                        var filename = item.Split('/');
+                                                                        var filenames = filename[filename.Length - 1];
+                                                                        var name = filenames.Substring(0, filenames.LastIndexOf('.'));
+                                                                        
+                                                                        if (!listname.Contains(name))
+                                                                        {
+                                                                              <div>
+                                                                                <a href="@Html.Raw(item)" target="_blank">@item </a>  
+                                                                                @if (Request.QueryString["act"] != "view")
+                                                                                {
+                                                                                    <a id="@name" onclick="DeleteFile('@name','@filenames','@item')" style="cursor:pointer;"><img src="/Assets/img/remove-icon-small.png" /></a> 
+                                                                                }
+                                                                            </div>  
+                                                                            listname.Add(name);
+                                                                        }
+                                                                       
+
+                                                                    
+                                                                    }
+                                                             }
+                                                           
+                                                        </div>
+                                                }
+                                           </div>
+                                          </div>
+                                          </div>
+                                       <div class="col-md-6">
+                                           <div class="form-group">
+                                              <label class="control-label col-md-3">评审结果：</label>
+                                              <div class="col-md-9">
+                                                <input type="text" placeholder="请填写评审结果" class="form-control" name="Result"  id="Result" value="@Model.Review.Result"/>
+                                              </div>
+                                           </div>
+                                       </div>
+                                   </div>
+
+                                   <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                               <label class="control-label col-md-3">开始时间：</label>
+                                               <div class="col-md-9">
+                                                  <input type="text" name="BeginTime" id="BeginTime" placeholder="开始时间"  value="@Model.BeginDate" class="form-control datefrom" style="width:200px;" />
+                                               </div>
+                                          </div>
+                                      </div>
+                                     
+                                     <div class="col-md-6"> 
+                                        <div class="form-group">
+                                          <label class="control-label col-md-3">结束时间：</label>
+                                          <div class="col-md-9">
+			                              <input type="text" name="EndTime" id="EndTime" placeholder="结束时间"  value="@Model.EndDate" class="form-control dateto" style="width:200px;"/>        
+                                          </div>
+                                       </div>
+                                    </div>
+                                  </div>
+                             </div>
+                                 
+                                 
+                                 <table class="table table-striped table-bordered table-hover" id="ReviewProlist" style=" width:100%; border-left: 0px; border-right:0px;">
+                                    <thead>
+                                      <tr>
+                                        <th style="width:10%;border-left: 0px;">需求编号</th>
+                                        <th style="width:15%">问题描述</th>
+                                        <th style="width:10%">提出人</th>
+                                        <th style="width:10%">最后期限</th>
+                                        <th style="width:10%">解决人员</th>
+                                        <th style="width:10%">UTMP状态</th>
+                                        <th style="width:10%">评审状态</th>
+                                        <th style="width:10%">开发工时</th>
+                                        <th style="width:10%">设计工时</th>
+                                        <th style="width:10%">测试工时</th>
+                                        <th style="width:5%; border-right:0px;">操作</th>
+                                      </tr>
+                                      @if (Request.QueryString["act"] != "view")
+                                      { 
+                                        <tr>
+                                        <th style="width:10%;border-left: 0px;">
+                                            <input type="text" placeholder="请填写需求编号" class="form-control" name="DemandCode"  id="DemandCode" style="width:95%;" />
+                                        </th>
+                                        <th style="width:15%"><input type="text" placeholder="问题描述" class="form-control" name="Description" id="Description"  style="width:95%;" /></th>
+                                        <th style="width:10%">
+                                            <input type="hidden" id="hidProvider" />
+                                            <select class="form-control select2_sample1" multiple id="Providerddl">
+                                             <option value="">请选择</option>
+                                             @foreach (var item in Model.UserList)
+                                             {
+                                                 <option value="@item.UserName">@item.FullName</option>
+                                             }
+                                             </select>
+                                        </th>
+                                        <th style="width:10%"><input type="text" name="ProEndDate" id="ProEndDate" placeholder="最后期限" class="form-control datefrom" style="width:160px;"/></th>
+                                        <th style="width:10%">
+                                            <input type="hidden" id="hidSolver" />
+                                            <select class="form-control select2_sample1" multiple id="Solverddl" >
+                                            <option value="">请选择</option>
+                                             @foreach (var item in Model.UserList)
+                                             {
+                                                 <option value="@item.UserName">@item.FullName</option>
+                                             }
+                                             </select>
+                                        </th>
+                                        <th style="width:10%">
+                                        </th>
+                                        <th style="width:10%">
+                                            @Html.DropDownListFor(model => model.ReviewPro.IfSolve, Model.IfSolveSelectItem, new { @class = "select2 form-control", @style = "width:110px;" })
+                                        </th>
+                                        <th style="width:10%">
+                                            <input type="text" placeholder="开发工时" class="form-control" name="DevelopTime" id="DevelopTime"  style="width:60px;" />
+                                        </th>
+                                        <th style="width:10%">
+                                            <input type="text" placeholder="设计工时" class="form-control" name="DesignTime" id="DesignTime"  style="width:60px;" />
+                                        </th>
+                                        <th style="width:10%">
+                                            <input type="text" placeholder="测试工时" class="form-control" name="TestTime" id="TestTime"  style="width:60px;" />
+                                        </th>
+                                        <th style="width:5%">
+                                            <input type="button" id="Submit" value="添加" class="btn btn-primary btn-sm" />
+                                        </th>
+                                      </tr>
+                                      }
+                                    </thead>
+                                    <tbody id="tbody">
+                                          
+                                    </tbody>
+                                 </table>
+                                 
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  @if (Request.QueryString["ifPro"] == "1")
+                                                  { 
+                                                      <a class="btn btn-default btn-sm"  href="@Url.Action("projectinfo", "project", new { id = Model.Review.ProjectID })">返回</a>
+                                                  }
+                                                  else if (Request.QueryString["ifPro"] != "1" && ViewBag.Role != null)
+                                                  { 
+                                                      <a class="btn btn-default btn-sm"  href="@Url.Action("Reviewlist", "Review")">返回</a>
+                                                  }
+                                                  @if (Request.QueryString["act"] != "view")
+                                                  { 
+                                                     <button type="submit" id="btnsubmit" class="btn btn-primary btn-sm">
+				                                        提交 <i class="m-icon-swapright m-icon-white"></i>
+				                                     </button>
+                                                  }
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+                                    <div id="Responsive" class="modal fade" tabindex="-1" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                             <div class="modal-content">
+                                                <div class="modal-header">
+                                                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                   <h4 class="modal-title">选择人员</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                     <p>
+                                                         <select class="form-control select2_sample1" multiple id="Memberddl">
+                                                         @foreach (var item in Model.UserList)
+                                                         {
+                                                             <option value="@item.UserName">@item.FullName</option>
+                                                         }
+                                                         </select>
+                                                     </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                   <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                                                   <button type="button" class="btn btn-success" data-dismiss="modal" id="Membersbm">保存</button>
+                                                </div>
+                                             </div>
+                                          </div>
+                                      </div>
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+        
+          
+   </div>
+ </div>
+ <script src="/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+    <script src="/Assets/plugins/jquery-validation/jquery.validate.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>  
+	<script src="/assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript" ></script>
+
+
+
+
+
+
+
+
+ 	<script type="text/javascript">
+ 	    jQuery(document).ready(function () {
+ 	        // initiate layout and plugins
+ 	        App.init();
+ 	        FormSamples.init();
+ 	    });
+ 	    function Load() {
+ 	        if ($("#hidIfAdd").val() != "1") {
+ 	            $("#Purpose").val("需求的可行性、合理性、风险、工作量评估");
+ 	        }
+ 	        $.ajax({
+ 	            url: "/Review/GetReiewProAjax",
+ 	            type: "POST",
+ 	            data: { id: $("#hidID").val() },
+ 	            success: function (data) {
+ 	                //alert(data);
+ 	                $("#tbody").html(data);
+ 	                if ($("#hidIfDel").val() == "1") {
+ 	                    $("input[name='del']").each(function () {
+ 	                        $(this).css("display", "none");
+ 	                    });
+ 	                }
+ 	            }
+ 	        });
+ 	    }
+ 	    Load();
+
+ 	    function DeleteReviewPro(id) {
+ 	        $.ajax({
+ 	            url: "/Review/DeleteReviewPro",
+ 	            type: "POST",
+ 	            data: { id: id },
+ 	            success: function (data) {
+ 	                if (data == "1") {
+ 	                    Load();
+ 	                    layer.msg('删除成功', 1, -1);
+ 	                }
+ 	                else {
+ 	                    alert("删除失败");
+ 	                }
+ 	            }
+ 	        });
+ 	    }
+        //删除附件
+ 	    function DeleteFile(id, filename, fileurl) {
+ 	        var newfileurls="";
+ 	        $("#" + id).parent().remove();
+ 	        var file = $("#Attachment").val();
+ 	        var fileurls = file.substr(0,file.length-1).split(',');
+ 	        for (var i = 0; i < fileurls.length; i++) {
+ 	            if (fileurls[i] != fileurl) {
+ 	                newfileurls += fileurls[i] + ",";
+                }
+ 	        }
+ 	        $("#Attachment").val(newfileurls);
+ 	        $.ajax({
+                url:'@Url.Action("DeleteFile", "Review")',
+                type: 'POST',
+                data:{ filename: filename },
+                success: function (data) {
+                    layer.msg(data, 1, -1);
+                }
+            })
+            alert($("#Attachment").val());
+        }
+
+        $(document).ready(function () {
+            var value = "";
+            //文件上传
+            $('#uploadify').uploadify({
+                uploader: '/Review/Upload',           // 服务器端处理地址
+                swf: '/uploadify/uploadify.swf',    // 上传使用的 Flash
+                width: 60,                          // 按钮的宽度
+                height: 23,                         // 按钮的高度
+                buttonText: "上传",                 // 按钮上的文字
+                buttonCursor: 'hand',                // 按钮的鼠标图标
+                fileObjName: 'Filedata',            // 上传参数名称
+                // 两个配套使用
+                //fileTypeExts: "*.jpg;*.png",             // 扩展名
+                //fileTypeDesc: "请选择 jpg png 文件",     // 文件说明
+
+                auto: true,                // 选择之后，自动开始上传
+                multi: true,               // 是否支持同时上传多个文件
+                queueSizeLimit: 10,          // 允许多文件上传的时候，同时上传文件的个数
+                removeCompleted: false,      //上传完成后不自动消失
+                onUploadSuccess: function (file, data) {                            //data参数是接受返回上传文件地址的
+                    $('#' + file.id).find('.data').html(' 上传完毕');
+                    var file = $("#Attachment").val();
+
+                    var attach = $("#AttachmentTxt").text();
+                    if (attach.indexOf(data) < 0) {
+                        value += data + ",";
+                    }
+
+                    $("#Attachment").val(file + value);
+
+                }
+            });
+
+            $(".datefrom").datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', autoclose: true });
+            $(".dateto").datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', autoclose: true });
+            $("#ProEndDate").datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', autoclose: true });
+
+            $("#btnsubmit").click(function () {
+                if ($("#Attachment").val() == "") {
+                    layer.msg("请上传附件", 1, -1);
+                    return false;
+                }
+            });
+
+            $("a1").click(function () {
+                alert("123");
+            })
+
+            $("#Submit").click(function () {
+
+                var index = parent.layer.getFrameIndex(window.name);
+                var code = $("#DemandCode").val();
+                var descrip = $("#Description").val();
+                var provider = $("#hidProvider").val();
+                var line = $("#ProEndDate").val();
+                var solver = $("#hidSolver").val();
+                if (provider != "" && provider != null) {
+                    provider = provider + ",";
+                }
+                if (solver != "" && solver != null) {
+                    solver = solver + ",";
+                }
+                var ifdone = $("#ReviewPro_IfSolve").val();
+                var developtime = $("#DevelopTime").val();
+                var designtime = $("#DesignTime").val();
+                var testtime = $("#TestTime").val();
+                if (code == "") {
+                    layer.msg('请填写需求编号', 1, -1);
+                    return false;
+                }
+                $.ajax({
+                    url: "/Review/ReviewProAdd",
+                    type: "POST",
+                    data: { ReviewID: $("#hidID").val(), DemandCode: code, Provider: provider, Description: descrip, Solver: solver, date: line, ifsolve: ifdone, DevelopTime: developtime, DesignTime: designtime, TestTime: testtime },
+                    success: function (data) {
+                        if (data == "提交成功") {
+                            $("#DemandCode").val("");
+                            $("#ReviewPro_IfSolve").val("");
+                            $("#Description").val("");
+                            $("#ProEndDate").val("");
+                            $("#Providerddl").val("");
+                            $("#Solverddl").val("");
+                            $("#DevelopTime").val("");
+                            $("#DesignTime").val("");
+                            $("#TestTime").val("");
+                            Load();
+                        }
+                        else {
+                            layer.msg(data, 1, -1);
+                        }
+
+                    }
+                })
+            });
+
+
+            $("#Providerddl").change(function () {             //由于无法直接取值，所以要把值赋给hidden
+                var value = $("#Providerddl").val();
+                $("#hidProvider").val(value);
+            });
+
+            $("#Solverddl").change(function () {              //由于无法直接取值，所以要把值赋给hidden
+                var value = $("#Solverddl").val();
+                $("#hidSolver").val(value);
+            });
+
+
+            $("#Membersbm").click(function () {                //保存评审人员
+                var fullname = $("#Memberddl").find("option:selected").text();
+                var username = $("#Memberddl").val();
+                $("#Member").val(fullname);
+                $("#hidUsername").val(username + ",");
+            });
+
+
+            $("#Revform").validate({
+                rules: {
+                    ProjectCode: { required: true },
+                    Purpose: { required: true },
+                    Scale: { required: true },
+                    Method: { required: true },
+                    IfReview: { required: true },
+                    PrepareTime: { required: true },
+                    Status: { required: true },
+                    BeginDate: { required: true },
+                    EndDate: { required: true }
+                },
+                messages: {
+                    ProjectCode: { required: "请选择项目" },
+                    Purpose: { required: "评审目的不能为空" },
+                    Scale: { required: "评审规模不能为空" },
+                    Method: { required: "请选择评审方式" },
+                    IfReview: { required: "请选择是否需要复审" },
+                    PrepareTime: { required: "准备工作量不能为空" },
+                    Status: { required: "请选择评审状态" },
+                    BeginDate: { required: "请选择开始时间" },
+                    EndDate: { required: "请选择结束时间" }
+                }
+            });
+        });
+     </script>
+
+</div>

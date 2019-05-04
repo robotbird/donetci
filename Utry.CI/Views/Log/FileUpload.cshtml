@@ -1,0 +1,25 @@
+﻿
+
+@{
+    ViewBag.Title = "FileUpload";
+}
+
+<h2>FileUpload</h2>
+<script type="text/javascript">
+    var file = document.getElementById("file");
+    function getPath(obj, fileQuery) {
+        var file = fileQuery.files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            obj.setAttribute("src", e.target.result)
+        }
+        reader.readAsDataURL(file);
+        alert(reader.readAsDataURL(file));
+    }
+</script>
+
+<form action="@Url.Action("FileUpload")" method="post" id="po" enctype="multipart/form-data">
+    <input type="file" id="file" name="file"  onchange="getPath(obj,this)"/>
+    <input type="submit"/> 
+</form>
+

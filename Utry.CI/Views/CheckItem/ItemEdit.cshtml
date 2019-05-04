@@ -1,0 +1,117 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.CheckItemModel
+@{
+    ViewBag.Title = "添加需求或者bug提交物";
+}
+<style>
+.col-md-3{width:10%;}
+</style>
+<div style="margin-top:60px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">提交物清单填写</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  name="form1" method="post" class="form-horizontal form-bordered form-row-stripped" action="@Url.Action("ItemEdit", "checkitem")" enctype="multipart/form-data">
+
+                            <input type="hidden"  id="ID" name="ID" value="@Model.CheckItem.ID" />
+                            <input type="hidden"  id="PlanId" name="PlanId" value="@Model.CheckItem.PlanId" />
+
+                                 <div class="form-body">
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">需求(bug)编号：</label>
+                                       <div class="col-md-9">
+                                          <input type="text" placeholder="请填写编号" class="form-control" id="DemandCode" name="DemandCode"  style="width:95%;" value="@Model.CheckItem.DemandCode"/>
+                                       </div>
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">提交物类型：</label>
+                                       <div class="col-md-9">
+                                        <select name="ItemType" id="ItemType" class="form-control" style="width:10%;">
+                                                    @if (Model.CheckItem.ItemType == "bug")
+                                                    {
+                                                       <option value="需求">需求</option>
+					                                   <option selected="selected"  value="bug">bug</option>
+                                                    }
+                                                    else
+                                                    { 
+                                                        <option selected="selected"  value="需求">需求</option>
+					                                   <option  value="bug">bug</option>
+                                                    }
+				                                </select>
+                                       </div>
+                                    </div>
+
+                                      <div class="form-group">
+                                       <label class="control-label col-md-3">计划编号：</label>
+                                       <div class="col-md-9">
+                                         <input type="text"  class="form-control" id="PlanCode" name="PlanCode"  style="width:95%;"  readonly="readonly"  value="@Model.plan.PlanCode"/>
+                                       </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">代码清单：</label>
+                                       <div class="col-md-9">
+                                          <textarea class="form-control" name="CodeList" rows="2" cols="20" id="CodeList" style="height:200px;width:95%;">@Model.CheckItem.CodeList </textarea>
+                                          <span class="help-block">格式：CCMS_V6\web\REPORTS\RptHrmStaff.aspx(修改)</span>
+                                       </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">提交物：</label>
+                                       <div class="col-md-9">
+                                                 <input type="hidden"  id="Attachment" name="Attachment" value="@Model.CheckItem.Attachment"  />
+                                                <input type="file" name="AttachmentFile" id="AttachmentFile"  /> 
+                                                @if (Model.CheckItem.Attachment != "")
+                                                {
+                                                <a href="@Model.CheckItem.Attachment" target="_blank">@Model.CheckItem.Attachment</a>        
+                                                }
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">验证方法：</label>
+                                       <div class="col-md-9">
+                                           <textarea class="form-control"  name="ValidateNote" rows="2" cols="20" id="ValidateNote" style="height:100px;width:95%;">@Model.CheckItem.ValidateNote</textarea>
+                                       </div>
+                                    </div>
+                                   <div class="form-group  last">
+                                    <label class="control-label col-md-3">部署注意事项：</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control"  name="DeployNote" rows="2" cols="20" id="DeployNote" style="height:100px;width:95%;">@Model.CheckItem.DeployNote</textarea> 
+                                    </div>        
+                                  </div>
+
+                                 </div>
+
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  <a class="btn btn-default btn-sm"  href="javascript:void(0)" onclick="history.go(-2)">返回</a>
+
+                                               @if (Request.QueryString["act"] != "view")
+                                                {
+                                                  <button type="submit" class="btn btn-primary btn-sm" onclick="doUpload()">保存</button>    
+                                                }
+                                                                                                              
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+                        </div>
+ </div>
+
+</div>

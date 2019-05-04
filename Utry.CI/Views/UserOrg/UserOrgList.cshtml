@@ -1,0 +1,55 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.UserOrgModel
+@{
+    ViewBag.Title = "开发小组列表";
+}
+
+<div style="margin-top:60px;">
+<form name="form1" >
+
+ @Html.JPartial("_Notifications")
+ <div class="table-toolbar">
+
+    <div class="btn-group">
+          <a id="sample_editable_1_new" class="btn btn-sm btn-success"  href="@Url.Action("UserOrgAdd", "UserOrg")">
+             添加小组 <i class="icon-plus"></i>
+          </a>
+    </div>
+                      
+</div>
+
+
+  <table class="table table-striped table-bordered table-hover" id="checklist">
+        <thead>
+          <tr>
+            <th>开发小组名称</th>
+            <th>开发小组编号</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          @foreach (var item in Model.UserOrgList)
+          {
+              <tr>
+              <td>
+               @item.OrgName
+              </td>
+              <td>
+               @item.OrgCode
+              </td>
+              <td>
+              <a href="@Url.Action("UserOrgEdit", "UserOrg", new { OrgCode = item.OrgCode })">编辑</a>
+               <a href="@Url.Action("UserOrgDelete", "UserOrg", new { OrgCode = item.OrgCode })" onclick="return confirm('确定删除?');">删除</a>
+              </td>
+              </tr>
+          }
+           
+        </tbody>
+      </table>
+
+
+<div id="pager"><ul class="pagination"></ul> </div>
+
+</form>
+</div>

@@ -1,0 +1,158 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.ReviewModel
+@{
+    ViewBag.Title = "评审列表";
+}
+
+<div style="margin-top:60px;">
+<form name="form1" method="post" action="@Url.Action("ReviewList", "Review")"  enctype="multipart/form-data">
+@Html.JPartial("_Notifications")
+<div class="table-toolbar">
+
+    <div class="btn-group">
+          <a id="sample_editable_1_new" class="btn btn-sm btn-success"  href="@Url.Action("ReviewAdd", "Review")" >
+             添加评审 <i class="icon-plus"></i>
+          </a>
+    </div>
+
+    <div class="btn-group">
+       @Html.DropDownList("Status", Model.StatusSelectItem, new { @class = "select2 form-control" })
+    </div>
+
+      <div class="btn-group">
+           	<input type="text" name="ProjectName" id="ProjectName" placeholder="项目名称" value="@Model.ProjectName" class="form-control" style="width:180px;"/>
+      </div>
+
+      <div class="btn-group">
+           	<input type="text" name="DemandCode" id="DemandCode" placeholder="需求编号" value="@Model.DemandCode" class="form-control" style="width:180px;"/>
+      </div>
+
+      <div class="btn-group">
+            <input type="text" name="BeginDate" id="BeginDate" placeholder="开始时间"  value="@Model.BeginDate" class="form-control datefrom" style="width:130px;"/> 
+      </div>
+
+     <div class="btn-group">
+			<input type="text" name="EndDate" id="EndDate" placeholder="结束时间" value="@Model.EndDate" class="form-control dateto" style="width:130px;"/>        
+      </div>
+
+      <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-success" onclick="query()"><i class="icon-search"></i></button>      </div>
+   
+                      
+</div>
+
+
+<table class="table table-striped table-bordered table-hover" id="reviewlist">
+        <thead>
+          <tr>
+            <th>项目名称</th>
+            <th>需求编号</th>
+            <th>评审时间</th>
+            <th>评审结果</th>
+            <th>耗时(h)</th>
+            <th>问题(个)</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+
+         @foreach (var item in Model.ReviewList)
+         {
+          <tr>
+           <td>@item.ProjectName</td>
+           @if (item.DemandCode == null)
+           {
+              <td>@item.DemandCode</td>
+           }
+           else
+           {
+              <td>@Html.Raw( item.DemandCode.Replace(",","<br/>"))</td>
+           }
+            <td>@item.BeginDate  </td>
+            <td>@item.Status  </td>
+            @{
+                
+            
+          string time = item.EndDate.Subtract(item.BeginDate).TotalHours.ToString();
+          string hour = string.Empty;
+          var count = 0;
+
+
+          if (item.EndDate < item.BeginDate)
+          {
+              hour = "开始时间大于结束时间";
+          }
+          else 
+          {
+              if (time.Length == 1)
+              {
+                  hour = time;
+              }
+              else
+              {
+                  if (time.Length > 3) 
+                  {
+                      hour = time.Substring(0, 3);                  
+                  }
+              }
+          }
+
+          if (item.Description != null)                   
+          {
+              var descriptions = item.Description.Split(',');
+              foreach (var descpt in descriptions)
+              {
+                  if (descpt.Length > 1)
+                  {
+                      count++;
+                  }
+              }
+          }
+       } 
+       
+      <td>@hour</td>
+      @if (item.Description == null)
+       {
+          <td></td>
+       }
+       else
+       {
+          <td>@count</td>
+       }
+            <td>
+               <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    操作 <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="@Url.Action("ReviewEdit", "Review", new { Id = item.ID })">修改</a></li>
+                    <li><a href="@Url.Action("ReviewDelete", "Review", new { Id = item.ID })" onclick="return confirm('确定删除?');">删除</a></li>
+                    <li><a href="@Url.Action("ReviewEdit", "Review", new { Id = item.ID, act = "view" })">查看</a></li>
+                  </ul>
+                </div>
+             </td>
+          </tr>
+         }
+
+        </tbody>
+      </table>
+
+
+<div id="pager"><ul class="pagination">@Html.Pager(Model.PageList).ShowIndividualPages(true)</ul> </div>
+</form>
+</div>
+
+<script type="text/javascript">
+    //查询
+    function query() {
+        document.forms[0].action = '@Url.Action("Reviewlist", "Review")';
+        document.forms[0].method = 'post';
+        document.forms[0].submit();
+    }
+
+    $(".datefrom").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+    $(".dateto").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+</script>
+
+
+

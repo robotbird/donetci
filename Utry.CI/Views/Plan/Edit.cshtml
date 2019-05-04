@@ -1,0 +1,106 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.PlanModel
+@{
+    ViewBag.Title = "版本发布计划编辑";
+}
+<style>
+.col-md-3{width:10%;}
+</style>
+<div style="margin-top:60px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">版本发布计划</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  name="form1" method="post" class="form-horizontal form-bordered form-row-stripped" action="@Url.Action("Edit", "plan")" enctype="multipart/form-data">
+
+                            <input type="hidden"  id="ID" name="ID" value="@Model.plan.ID" />
+
+                                 <div class="form-body">
+
+                                 @if (!string.IsNullOrEmpty(Model.plan.ID)) 
+                                 {
+                                   <div class="form-group">
+                                       <label class="control-label col-md-3">计划编号：</label>
+                                       <div class="col-md-9">
+                                          <input type="text" placeholder="请填写编号" class="form-control" id="PlanCode" name="PlanCode" readonly="readonly"  style="width:95%;" value="@Model.plan.PlanCode"/>
+                                       </div>
+                                    </div>
+                                 }
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">时间范围：</label>
+                                       <div class="col-md-9">
+                                           <input type="text" name="BeginTime" id="BeginTime" placeholder="开始时间"  value="@Model.plan.BeginTime" class="form-control datefrom" style="width:130px; float:left"/> 
+                                           <input type="text" name="EndTime" id="EndTime" placeholder="结束时间" value="@Model.plan.EndTime" class="form-control dateto" style="width:130px; margin-left:5px; padding-left:5px"/> 
+                                       </div>
+                                    </div>
+                                    
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3">开放日期</label>
+                                    <div class="col-md-3">
+                                        <div class="input-group input-medium date date-picker" data-date="2014-05-22" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                        <input type="text" name="OpenDate" value="@Model.plan.OpenDate" class="form-control" readonly>
+                                        <span class="input-group-btn">
+                                        <button class="btn  btn-sm btn-info" type="button"><i class="icon-calendar"></i></button>
+                                        </span>
+                                        </div>
+                                    </div>
+                                   </div>
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">状态：</label>
+                                       <div class="col-md-9">
+                                         <select name="Status" id="Status" class="form-control" style="width:10%;">
+                                           <option  selected="selected" value="待发布">待发布</option>
+					                       <option  value="已发布">已发布</option>
+					                       <option  value="提交中">提交中</option>
+				                      </select>
+                                       </div>
+                                    </div>
+                            
+                                   <div class="form-group  last">
+                                    <label class="control-label col-md-3">说明：</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control"  name="Note" rows="2" cols="20" id="Note" style="height:100px;width:95%;">@Model.plan.Note</textarea> 
+                                    </div>        
+                                  </div>
+
+                                 </div>
+
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  <a class="btn btn-default btn-sm"  href="@Url.Action("list", "plan")">返回</a>
+
+                                               @if (Request.QueryString["act"] != "view")
+                                               {
+                                                  <button type="submit" class="btn btn-primary btn-sm" onclick="doUpload()">保存</button>    
+                                                }
+                                                                                                              
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+                        </div>
+ </div>
+
+</div>
+
+<script>
+    $(".datefrom").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+    $(".dateto").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+</script>

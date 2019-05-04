@@ -1,0 +1,179 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.ProjectModel
+@{
+    ViewBag.Title = "持续集成";
+}
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>持续集成</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
+    
+    
+    <link rel="shortcut icon" href="favicon.ico" />
+    <style>
+    /* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+  padding: 60px 15px 0;
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+    
+
+    
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">CI</a>
+        </div>
+        <div class="navbar-collapse collapse">
+        @if (ViewBag.Role != null)
+        { 
+            <ul class="nav navbar-nav">
+
+           @if (ViewBag.Role == "版本发布人员")
+           {
+               <li><a href="/project/projectlist">项目管理</a></li>  
+           }
+           else if (ViewBag.Role == "开发人员")
+           {
+               <li><a href="/project/projectlist">项目管理</a></li>
+           }
+           else if (ViewBag.Role == "开发组长")
+           {
+               <li><a href="/project/projectlist">项目管理</a></li>     
+           }
+           else if (ViewBag.Role == "管理员")
+           {
+             <li><a href="/userorg/userorglist">小组管理</a></li>
+             <li><a href="/users/userslist">人员管理</a></li>  
+             <li><a href="/project/projectlist">项目管理</a></li>
+             <li><a href="/review/reviewlist">评审管理</a></li>
+             <li><a href="/report/reportlist">报表管理</a></li>
+             <li><a href="/review/reviewprolist">需求管理</a></li>
+             <li><a href="/log/loglist">Log日志</a></li>
+           }
+           @if (ViewBag.Role != null)
+           { 
+              <li><a href="/home/logout">退出</a></li>
+           }
+
+          </ul>
+        }
+        else
+        {
+            <form  class="navbar-form navbar-right" role="form" name="loginform" id="loginform" method="post" action="@Url.Action("Login", "home")">
+                <div class="form-group">
+                  <input type="text"  name="username" placeholder="用户名" class="form-control" style="height:30px">
+                </div>
+                <div class="form-group">
+                  <input type="password" name="password" placeholder="密码" class="form-control" style="height:30px">
+                </div>
+                <button type="submit" class="btn btn-sm btn-success">登录</button>
+            </form> 
+        }
+        
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+        @Html.ValidationSummary(true)
+
+    <div class="portlet" style="width:100%">
+                  <div class="portlet-title">
+                     <div class="caption">项目一览</div>
+                  </div>
+                  <div class="portlet-body">
+                     <div class="table-responsive">
+                        <table class="table table-hover">
+                           <thead>
+                              <tr>
+                                    <th>项目名称</th>
+                                    <th>测试地址</th>
+                                    <th>开发主管</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                                 @foreach (var item in Model.ProjectList)
+                                 {
+                                   <tr>
+                                   <td><a href="@Url.Action("ProjectInfo", "Project", new { id = item.ID })">@item.ProjectName</a> </td>
+                                   <td><a target="_blank" href="@item.ProjectTestURL">@item.ProjectTestURL</a></td>
+                                   <td>@item.Executive</td>
+                                  </tr>
+                                 }
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+
+
+
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+
+    <script src="/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+  </body>
+</html>

@@ -1,0 +1,113 @@
+﻿@model Utry.CI.Models.UserModel
+@using Utry.Framework.Mvc
+
+@{
+    Layout = null;
+    }
+<html>
+    <head>
+@*<script src="/Assets/zTree/js/jquery-1.4.4.min.js" type="text/javascript"></script>*@
+<script src="/Assets/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+   <script src="/Assets/layer/layer.min.js" type="text/javascript"></script>
+<link href="/Assets/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+<script src="/Assets/zTree/js/jquery.ztree.all-3.5.min.js" type="text/javascript"></script>
+<link href="../../Assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+
+<link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+   <link href="/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+   <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+
+
+
+    </head>
+<body>
+<div style="width:100%; text-align :center;height:5px;">
+    <input type="hidden" id="hidUsername" value="@Model.User.UserName" />
+    <input type="hidden" id="hidFullname" value="@Model.User.FullName" />
+</div>
+
+
+<div class="btn-group">
+    <input type="text" placeholder="输入姓名搜索" class="form-control" id="txtSearchName"  style="width:150px; margin-left:30px;"/>
+</div>
+<div class="btn-group">
+      <button type="button" id="btnSearch" class="btn btn-sm btn-success" style=" height:30px;"><i class="icon-search"></i></button>
+</div>
+<div >
+    <ul id="tree" class="ztree" style=" padding-left:30px;"></ul>
+</div>
+</body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var setting = {
+                view: {
+                    showLine: true,
+                    showTitle: true,
+                    showIcon: true,
+                    expandSpeed: "fast"
+                },
+                check: {
+                    chkStyle: "checkbox",
+                    enable: true,
+                    chkboxType: { "Y": "s", "N": "s" }
+                },
+                callback: {
+                    //onClick: zTreeOnClick,                      点击节点文字回调函数
+                    onCheck: zTreeOnCheck                         //点击复选框回调函数
+                }
+            };
+
+            function zTreeOnClick(event, treeId, treeNode) {         //点击节点文字回调函数
+                //alert(treeNode.id + ", " + treeNode.name);
+            }
+
+            function zTreeOnCheck(event, treeId, treeNode) {         //点击复选框回调函数
+                var treeobj = $.fn.zTree.getZTreeObj("tree");
+                var nodes = treeobj.getCheckedNodes(true);
+                var unames = "";
+                var fnames = "";
+                if (nodes.length > 0) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        unames += nodes[i].id + ",";
+                        fnames += nodes[i].name + ",";
+                    }
+                    $("#hidUsername").val(unames);
+                    $("#hidFullname").val(fnames);
+                }
+                else {
+                    $("#hidUsername").val("");
+                    $("#hidFullname").val("");
+                }
+
+            }
+
+            function Load() {
+                $.ajax({
+                    url: '@Url.Action("ChooseUser","Users")',
+                    type: 'Get',
+                    data: { username: $("#hidUsername").val() },
+                    success: function (data) {
+                        $.fn.zTree.init($("#tree"), setting, eval(data));
+                    }
+                });
+            }
+
+            Load();
+
+            $("#btnSearch").click(function () {
+                if ($("#txtSearchName").val != "") {
+                    $.ajax({
+                        url: '@Url.Action("SearchUser","Users")',
+                        type: 'Get',
+                        data: { fullname: $("#txtSearchName").val() },
+                        success: function (data) {
+                            $.fn.zTree.init($("#tree"), setting, eval(data));
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+</html>

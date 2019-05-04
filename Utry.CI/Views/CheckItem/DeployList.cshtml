@@ -1,0 +1,166 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.CheckItemListModel
+@{
+    ViewBag.Title = "版本发布";
+}
+
+<div style="margin-top:60px;">
+<form name="form1" method="get" action="@Url.Action("deploylist", "checkitem")" >
+
+ @Html.JPartial("_Notifications")
+
+<div class="table-toolbar">
+
+     <div class="btn-group">
+                  <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    操作 <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" onclick="getVssCode(7)">获取v7代码</a></li>
+                    <li><a href="#" onclick="getVssCode(6)">获取v6代码</a></li>
+                    <li><a href="#" onclick="expToExcel()">导出excel</a></li>
+                  </ul>
+     </div>
+
+     <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-default">筛选</button>
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-angle-down"></i></button>
+                        <div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
+                           <label><input type="checkbox" name="VersionState" value="1" />已发布版本</label>
+                           <label><input type="checkbox" name="VersionState" value="0" />未发布版本</label>
+                           <label><input type="checkbox" name="TestState" value="1" />测试通过</label>
+                           <label><input type="checkbox" name="TestState" value="0" />测试未通过</label>
+                          @* <label><input type="checkbox" name="CodeState" value="1" />重复代码</label>
+                           <label><input type="checkbox" name="CodeState" value="0" />不重复代码</label>*@
+                           <label><input type="checkbox" name="IsNewCode" value="1" />新增代码</label>
+                           <label><input type="checkbox" name="IsNewCode" value="0" />修改代码</label>
+                        </div>
+    </div>
+     <div class="btn-group">
+       @Html.DropDownList("PlanId", Model.PlanSelectItem, new { @class = "select2 form-control" })
+    </div>
+
+     <div class="btn-group">
+           	<input type="text" name="DemandCode" id="DemandCode" placeholder="需求(bug)编号" value="@Model.DemandCode" class="form-control" style="width:180px;"/>
+      </div>
+
+     <div class="btn-group">
+            <input type="text" name="datefrom" id="datefrom" placeholder="开始时间"  value="@Model.datefrom" class="form-control datefrom" style="width:130px;"/> 
+      </div>
+
+     <div class="btn-group">
+			<input type="text" name="dateto" id="dateto" placeholder="结束时间" value="@Model.dateto" class="form-control dateto" style="width:130px;"/>        
+      </div>
+
+     <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-success" onclick="query()"><i class="icon-search"></i></button>      </div>
+     
+</div>
+
+<table class="table table-striped table-bordered table-hover" id="checklist">
+        <thead>
+          <tr>
+            <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#checklist .checkboxes"     /></th>
+            <th>UTMP版本号</th>
+            <th>计划编号</th>
+            <th>需求(bug)编号</th>
+            <th>资源列表</th>
+            <th>相关附件</th>
+            <th>验证方法</th>
+            <th>部署注意事项</th>
+            <th>UTMP状态</th>
+            <th>获取次数</th>
+            <th>提交时间</th>
+            <th>开发人员</th>
+            <th>测试人员</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        @foreach (var item in Model.ItemList)
+        {
+          <tr>
+            <td><input type="checkbox" class="checkboxes" name="ItemId" value="@item.ID" /></td>
+            <td>@item.versionnum </td>
+            <td>@item.PlanCode </td>
+            <td>@item.DemandCode  </td>
+            <td>
+               @Html.Raw(Utry.Framework.Utils.TypeConverter.ObjectToString(item.CodeList).Replace("(新增)", "<span class=\"label label-sm label-warning\">新增</span> &nbsp;").Replace("(修改)", "<span class=\"label label-sm label-success\">修改</span> &nbsp;").Replace("(重复)", " &nbsp;<span class=\"label label-sm label-danger\">重复</span>&nbsp; "))
+            </td>
+            <td> 
+             <a href="@item.Attachment">@item.Attachment</a>  
+             </td>
+            <td>@item.ValidateNote</td>
+            <td>@item.DeployNote</td>
+            <td>
+            <span class="label label-sm label-success">@item.demandstate</span>
+            </td>
+            <td>
+            @if (item.GetVssCnt > 0)
+            {
+            <span class="badge badge-success"> @item.GetVssCnt</span>            
+            }
+            else { 
+              @item.GetVssCnt            
+            }
+            </td>
+            <td>@item.UpdateTime.ToShortDateString()</td>
+            <td>@item.Developer</td>
+            <td></td>
+          </tr>
+        }
+
+        </tbody>
+</table>
+
+<div id="pager"><ul class="pagination">@Html.Pager(Model.PageList).ShowIndividualPages(true)</ul> </div>
+
+</form>
+</div>
+<script type="text/javascript">
+
+    //查询
+    function query() {
+        document.forms[0].action = '@Url.Action("deploylist", "checkitem")';
+        document.forms[0].method = 'get';
+        document.forms[0].submit();
+    }
+
+ //导出excel
+    function expToExcel() {
+        document.forms[0].action = '@Url.Action("ExportToExcel", "checkitem")';
+        document.forms[0].method ='post';
+        document.forms[0].submit();
+    }
+    //获取vsscode
+    function getVssCode(version) {
+        var chkid = $("input[name='ItemId']:checked");
+        if (chkid.length==0) {
+            alert("请选择需求(bug)");
+            return false;
+        }
+        if (version == 7) {
+            document.forms[0].action = '@Url.Action("GetCheckListCode", "checkitem",new{v=7})';
+        }
+        if (version == 6) {
+            document.forms[0].action = '@Url.Action("GetCheckListCode", "checkitem",new{v=6})';
+        }
+        document.forms[0].method = 'post';
+        document.forms[0].submit();
+    }
+    ///全选
+    jQuery('#checklist .group-checkable').change(function () {
+        var set = jQuery(this).attr("data-set");
+        var checked = jQuery(this).is(":checked");
+        jQuery(set).each(function () {
+            if (checked) {
+                $(this).attr("checked", true);
+            } else {
+                $(this).attr("checked", false);
+            }
+        });
+        jQuery.uniform.update(set);
+    });
+    $(".datefrom").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true });
+    $(".dateto").datetimepicker({ format: 'yyyy-mm-dd hh:ii', autoclose: true});
+</script>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <PropertyGroup>
+        <VName>{BranchName}_Release</VName>
+        <WebAppOutput>..\WebAppPublished</WebAppOutput>
+         <WebSiteOutput>..\WebSitePublished</WebSiteOutput>
+   
+  </PropertyGroup>
+
+<ItemGroup>  
+  <MySourceFiles Include="web\**\*.dll;web\**\*.aspx;web\**\*.js;web\**\*.css;web\**\*.jpg;web\**\*.config;web\**\*.gif;web\**\*.config;web\**\*.png;web\**\*.ascx;"/>
+</ItemGroup> 
+
+  <Target Name="build">
+    <MsBuild Projects="{SlnName}" Targets="$(BuildCmd)" />
+    <!--<MsBuild Projects="sch.sln" Targets="$(BuildCmd)" />-->
+	  <!--<Delete Files="web\**\*.pdb" />-->
+	   
+	    <!--<Copy
+            SourceFiles="@(MySourceFiles)"
+            DestinationFiles="@(MySourceFiles->'$(VName)\%(RecursiveDir)%(Filename)%(Extension)')"
+        />-->
+		
+		  <!--<Exec
+            Command="ping.exe localhost"
+            WorkingDirectory="$(WorkspacePath)"
+            ContinueOnError="true" />-->
+        
+   </Target>
+   
+</Project>

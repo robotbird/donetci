@@ -1,0 +1,111 @@
+﻿@model Utry.CI.Models.UserModel
+@using Utry.Framework.Mvc
+﻿@{
+    ViewBag.Title = "CI | 人员信息";
+}
+<style>
+.col-md-3{width:10%;}
+</style>
+<div style="margin-top:60px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">人员信息</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  id="Orgform" action="@Url.Action(Model.Action, "Users")" method="post" class="form-horizontal form-bordered form-row-stripped" >
+                                    
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">用户名：</label>
+                                       <div class="col-md-9">
+                                       @if (Model.Action == "UserAdd")
+                                       { 
+                                        @Html.TextBoxFor(model => model.User.UserName, new { @class = "form-control"})
+                                       }
+                                       else
+                                       {
+                                        @Html.TextBoxFor(model => model.User.UserName, new { @class = "form-control", @readOnly = "readOnly" })
+                                        <input type="hidden" id="hidPwd" name="hidPwd" value="@Model.User.PassWord"/>
+                                       }
+                                       </div>
+                                    </div>
+
+                                 <div class="form-body">
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">人员姓名：</label>
+                                       <div class="col-md-9">
+                                          @Html.TextBoxFor(model => model.User.FullName, new { @class = "form-control" })
+                                       </div>
+                                    </div>
+
+                                    
+
+
+                                    
+                                        <div class="form-group">
+                                           <label class="control-label col-md-3">登录密码：</label>
+                                           <div class="col-md-9">
+                                              @Html.TextBoxFor(model => model.User.PassWord, new { @class = "form-control", @type = "password" })
+                                           </div>
+                                        </div>
+                                    
+                                    
+                                   
+
+                                      <div class="form-group">
+                                          <label class="control-label col-md-3">人员角色：</label>
+                                          <div class="col-md-9">
+                                                @Html.DropDownListFor(model => model.User.Role, Model.UserRole, new { @class = "select2 form-control" })
+                                          </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label class="control-label col-md-3">所属小组：</label>
+                                          <div class="col-md-9">
+                                               @Html.DropDownListFor(model => model.User.OrgCode, Model.UserSelect, new { @class = "select2 form-control" })
+                                          </div>
+                                       </div>
+
+                                 </div>
+
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  <a class="btn btn-default btn-sm"  href="@Url.Action("Userslist", "Users")">返回</a>
+                                                <button type="submit" id="register-submit-btn" class="btn btn-primary btn-sm">
+				                                提交 <i class="m-icon-swapright m-icon-white"></i>
+				                                </button>
+                                                                                                              
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+                        </div>
+ </div>
+
+ <script src="/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+ <script src="/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>  
+	<script src="/assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
+	<script src="/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript" ></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#User_PassWord").val("");
+        });
+    </script>
+</div>
+

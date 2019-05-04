@@ -1,0 +1,67 @@
+﻿@using Utry.Framework.Mvc
+@model Utry.CI.Models.CheckItemModel
+@{
+    ViewBag.Title = "添加计划内需求(bug)编号";
+}
+<style>
+.col-md-3{width:10%;}
+</style>
+<div style="margin-top:60px;">
+
+ <div class="tab-pane" >
+
+           @Html.JPartial("_Notifications")
+
+          <div class="portlet ">
+                           <div class="portlet-title">
+                              <div class="caption">需求编号</div>
+                           </div>
+                           <div class="portlet-body form">
+                              <!-- BEGIN FORM-->
+                              <form  name="form1" method="post" class="form-horizontal form-bordered form-row-stripped" action="@Url.Action("AddItemToPlan", "checkitem")" enctype="multipart/form-data">
+
+                            <input type="hidden"  id="ID" name="ID" value="@Model.CheckItem.ID" />
+
+                                 <div class="form-body">
+                                    <div class="form-group">
+                                       <label class="control-label col-md-3">需求(bug)编号：</label>
+                                       <div class="col-md-9">
+                                          <input type="text" placeholder="请填写编号" class="form-control" id="DemandCode" name="DemandCode"  style="width:95%;" value="@Model.CheckItem.DemandCode"/>
+                                       </div>
+                                    </div>
+                                   
+
+                                      <div class="form-group">
+                                          <label class="control-label col-md-3">计划编号</label>
+                                          <div class="col-md-4">
+                                               @Html.DropDownList("PlanId", Model.PlanSelectItem, new { @class = "form-control input-medium" })
+                                          </div>
+                                       </div>
+
+                                 </div>
+
+
+                                   <div class="form-actions fluid">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="col-md-offset-3 col-md-9">
+                                                  <a class="btn btn-default btn-sm"  href="@Url.Action("checklist", "checkitem")">返回</a>
+
+                                               @if (Request.QueryString["act"] != "view")
+                                                {
+                                                  <button type="submit" class="btn btn-primary btn-sm" onclick="doUpload()">保存</button>    
+                                                }
+                                                                                                              
+                                          </div>
+                                       </div>
+                                    </div>
+                                    </div>
+
+
+                              </form>
+                              <!-- END FORM-->  
+                           </div>
+                        </div>
+ </div>
+
+</div>
